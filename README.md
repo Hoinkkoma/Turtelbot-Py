@@ -1,58 +1,119 @@
 # Turtelbot-Py
-Pyton 
-Turtelbot 
-Code 
+
+Python-basierte Implementierung eines Turtle-Robot-Steuersystems.
+
+## Projekt-Beschreibung
+
+Turtelbot ist ein Roboter-Steuersystem basierend auf Python's `turtle` Modul. Das System ermöglicht die Steuerung eines virtuellen Roboters durch Kommandozeilen-Eingaben oder stdin.
+
+Der Code ist noch nicht fertig - Verbesserungsvorschläge sind willkommen!
+
+## Systemarchitektur
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Assoziation zu Raum                     │
+└─────────────────────────────────────────────────────────────┘
+         │                                           │
+         ▼                                           ▼
+    ┌─────────────┐                          ┌──────────────┐
+    │ Controller  │◄────────────────────────►│  Sensoren    │
+    │Befehl zur   │  Assoziation             │ Position im  │
+    │Sicherung    │                          │ Raum         │
+    └─────────────┘                          │ Geschwindigkeit
+         │                                   └──────────────┘
+         │                                           ▲
+         ▼                                           │
+    ┌─────────────────────┐                         │
+    │      Motor          │                         │
+    │ Bewegung im Raum    │◄────────┐              │
+    │ Umdreh-Geschwindigkeit        │              │
+    └─────────────────────┘         │              │
+                                    │              │
+                            ┌───────┴──────┐      │
+                            │  Aggregator  │──────┘
+                            └───────┬──────┘
+                                    │
+                                    ▼
+                            ┌──────────────────┐
+                            │    Roboter       │
+                            │ @ name : Turebot │
+                            └──────────────────┘
+```
+
+### Komponenten:
+
+- **Controller**: Zentrale Steuereinheit für Befehle und Sicherheit
+- **Motor**: Verwaltet Bewegungen und Rotationsgeschwindigkeit im Raum
+- **Sensoren**: Erfasst Position und Geschwindigkeit des Roboters
+- **Aggregator**: Koordiniert Datenfluss zwischen Komponenten
+- **Roboter (Turebot)**: Der virtuelle Roboter, der die Befehle ausführt
+
+## Verwendung
+
+Die Eingabe kann entweder per **Kommandozeile** oder **stdin** erfolgen:
+
+### Kommandozeile-Beispiel:
+```bash
+python main.py vorwärts 50
+```
+
+### Stdin-Beispiel:
+```bash
+echo -e "vorwärts\n50" | python main.py
+```
+
+### Interaktive Eingabe:
+```bash
+python main.py
+```
+(Dann werden Sie aufgefordert, Richtung und Distanz einzugeben)
+
+## Befehle
+
+- **vorwärts**: Roboter bewegt sich vorwärts
+- **rückwärts**: Roboter bewegt sich rückwärts
+- **links**: Roboter dreht nach links und bewegt sich
+- **rechts**: Roboter dreht nach rechts und bewegt sich
+
+## Parameter
+
+- **Distanz/Geschwindigkeit**: Eine numerische Zahl (Komma oder Punkt als Dezimaltrennzeichen möglich)
+
+## Code-Beispiel
+
+```python
 import sys
 import turtle
-Der code ist nicht fertig 
-verbesserungs Vorschläge dürfen gerne gemacht werden  
-# Eingabe entweder per Kommandozeile (z. B. "python zeit-3.py vorwärts 50")
-# oder per stdin (z. B. "echo vorwärts\n50 | python zeit-3.py")
+
+# Eingabe entweder per Kommandozeile oder stdin
 if len(sys.argv) >= 3:
     richtung = sys.argv[1].strip().lower()
     distanz_str = sys.argv[2]
 else:
-    # Wenn stdin kein Terminal ist (Pipes, Redirects), lese die ersten zwei Zeilen.
-    if not sys.stdin.isatty():
-        lines = [line.strip() for line in sys.stdin.readlines() if line.strip()]
-        if len(lines) >= 2:
-            richtung = lines[0].lower()
-            distanz_str = lines[1]
-        else:
-            # Fallback auf interaktive Eingabe
-            richtung = input("Richtung angeben (vorwärts, rückwärts, links, rechts): ").strip().lower()
-            distanz_str = input("Geben Sie die Geschwindigkeit/Distanz (Zahl) ein: ")
-    else:
-        # Interaktive Eingabe
-        richtung = input("Richtung angeben (vorwärts, rückwärts, links, rechts): ").strip().lower()
-        distanz_str = input("Geben Sie die Geschwindigkeit/Distanz (Zahl) ein: ")
-
-try:
-    distanz = float(distanz_str.replace(",", "."))
-except ValueError:
-    print("Ungültige Eingabe. Bitte eine Zahl eingeben.")
-    raise SystemExit(1)
+    richtung = input("Richtung angeben (vorwärts, rückwärts, links, rechts): ").strip().lower()
+    distanz_str = input("Geben Sie die Geschwindigkeit/Distanz (Zahl) ein: ")
 
 # Turtle initialisieren
 bot = turtle.Turtle()
-bot.speed(5)  # mittlere Geschwindigkeit
+bot.speed(5)
 
+# Befehle ausführen
 if richtung == "vorwärts":
-    bot.forward(distanz)
-elif richtung == "rückwärts":
-    bot.backward(distanz)
-elif richtung == "links":
-    bot.left(90)
-    bot.forward(distanz)
-elif richtung == "rechts":
-    bot.right(90)
-    bot.forward(distanz)
-else:
-    print("Ungültige Richtung. Bitte 'vorwärts', 'rückwärts', 'links' oder 'rechts' eingeben.")
-    raise SystemExit(1)
+    bot.forward(float(distanz_str))
+# ... weitere Richtungen
+```
 
-# Fenster offen halten (schließt nach ~2 Sekunden automatisch)
-screen = turtle.Screen()
-screen.ontimer(screen.bye, 2000)
-# `mainloop` läuft bis das Fenster geschlossen wird
-screen.mainloop()
+## Status
+
+⚠️ **Der Code ist noch nicht vollständig implementiert**
+
+Geplante Verbesserungen:
+- [ ] Vollständige Architektur-Implementierung
+- [ ] Fehlerbehandlung erweitern
+- [ ] Unit-Tests hinzufügen
+- [ ] Dokumentation erweitern
+
+## Beitragen
+
+Verbesserungsvorschläge und Contributions sind willkommen! 🙌
